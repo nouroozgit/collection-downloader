@@ -1,0 +1,23 @@
+# ── secrets: login cookies must NEVER be committed ──
+cookies*.txt
+*cookies*.txt
+settings.json
+sources.json
+
+# ── generated / local data ──
+gallery-dl.conf.json
+.thumbs/
+__pycache__/
+*.pyc
+*.log
+
+# ── build output (rebuild with build_exe.bat) ──
+build/
+dist/
+*.spec
+*.zip
+
+# downloads
+Collections/
+.archive.sqlite3
+.yt-archive*.txt
