@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دانلود کالکشن</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1d1d1f; --mute:#6b6b70; --line:#e4e2dc; --acc:#d6336c; --ok:#2b8a3e; --err:#c92a2a; --warn:#b26a00; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151517; --card:#1f1f22; --ink:#f1f1f3; --mute:#9a9aa2; --line:#33333a; --warn:#f0a030; } }
+  * { box-sizing:border-box }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.7 Vazirmatn, "Segoe UI", Tahoma, sans-serif; }
+  main { max-width:900px; margin:0 auto; padding:28px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 4px } .sub { color:var(--mute); margin:0 0 18px }
+  .tabs { display:flex; gap:6px; margin-bottom:16px; border-bottom:1px solid var(--line) }
+  .tabs button { background:transparent; color:var(--mute); border:0; border-bottom:2px solid transparent; border-radius:0; padding:8px 16px; margin-bottom:-1px }
+  .tabs button.on { color:var(--ink); border-bottom-color:var(--acc); font-weight:600 }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+  .grow { flex:1 1 auto; min-width:0 }
+  textarea { font:13px/1.6 Consolas, monospace; color:inherit; background:transparent; border:1px solid var(--line); border-radius:10px; padding:10px 12px; width:100%; resize:vertical; text-align:left }
+  input[type=text], input:not([type]), select { font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:10px; padding:9px 12px; width:100% }
+  input[dir=ltr] { text-align:left }
+  button { font:inherit; border:0; border-radius:10px; padding:9px 16px; cursor:pointer; background:var(--acc); color:#fff; white-space:nowrap }
+  button.ghost { background:transparent; color:var(--ink); border:1px solid var(--line) }
+  button.small { padding:5px 11px; font-size:13px }
+  button.danger { color:var(--err) }
+  button:disabled { opacity:.5; cursor:default }
+  label { display:block; font-size:13px; color:var(--mute); margin:12px 0 4px }
+  details summary { cursor:pointer; font-weight:600 }
+  .hint { font-size:12.5px; color:var(--mute); margin-top:4px }
+  .warn { color:var(--warn) } .ok { color:var(--ok) } .err { color:var(--err) }
+  h2 { font-size:15px; margin:0 0 10px }
+  .stats { display:flex; gap:24px; margin:4px 0 12px } .stats b { font-size:22px; display:block }
+  .state { font-weight:600 } .state.done{color:var(--ok)} .state.error{color:var(--err)}
+  pre { font-family:Consolas, Vazirmatn, Tahoma, monospace; direction:ltr; text-align:left; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px; height:240px; overflow:auto; font-size:12px; white-space:pre-wrap; word-break:break-all; margin:0 }
+  .check { display:flex; align-items:center; gap:8px; margin-top:10px; color:var(--ink); font-size:14px } .check input{width:auto}
+  .banner { border:1px solid var(--warn); border-radius:10px; padding:8px 12px; margin-bottom:12px; font-size:13.5px; color:var(--warn) }
+
+  .src { display:flex; gap:10px; align-items:center; padding:10px 0; border-top:1px solid var(--line) }
+  .src:first-of-type { border-top:0 }
+  .src .nm { font-weight:600 } .src .u { direction:ltr; text-align:left; font-size:12px; color:var(--mute); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .src .meta { font-size:12.5px; color:var(--mute) }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px }
+  .tile { position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; background:var(--line); cursor:pointer; border:0; padding:0 }
+  .tile img, .tile video { width:100%; height:100%; object-fit:cover; display:block }
+  .tile .badge { position:absolute; top:6px; inset-inline-start:6px; background:rgba(0,0,0,.6); color:#fff; font-size:11px; border-radius:6px; padding:0 6px }
+  .tile .cap { position:absolute; bottom:0; inset-inline:0; padding:14px 8px 6px; font-size:11.5px; line-height:1.4; color:#fff; background:linear-gradient(transparent, rgba(0,0,0,.75)); max-height:50%; overflow:hidden; opacity:0; transition:opacity .15s }
+  .tile:hover .cap { opacity:1 }
+  dialog { border:0; border-radius:14px; padding:0; width:min(96vw,980px); max-height:94vh; background:var(--card); color:var(--ink) }
+  dialog::backdrop { background:rgba(0,0,0,.7) }
+  .lb { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr) }
+  @media (max-width:700px) { .lb { grid-template-columns:1fr } }
+  .lb .media { background:#000; display:flex; align-items:center; justify-content:center; min-height:300px; max-height:90vh }
+  .lb .media img, .lb .media video { max-width:100%; max-height:90vh }
+  .lb .side { padding:16px; overflow:auto; max-height:90vh; display:flex; flex-direction:column; gap:10px }
+  .lb .capt { white-space:pre-wrap; word-break:break-word; font-size:14px; line-height:1.8; flex:1 }
+</style>
+</head>
+<body>
+<main>
+  <h1>دانلود کالکشن پینترست و اینستاگرام</h1>
+  <p class="sub">لینک یک کالکشن/بورد/پلی‌لیست کامل یا یک پست و ویدیوی تکی را بدهید (پینترست، اینستاگرام، یوتیوب). چند لینک را هم می‌شود با هم داد؛ هر کدام در یک خط.</p>
+
+  <div class="tabs">
+    <button class="on" data-tab="dl">دانلود</button>
+    <button data-tab="gal">گالری</button>
+  </div>
+
+  <!-- ───────── دانلود ───────── -->
+  <section id="tab-dl">
+    <div class="card">
+      <div id="loginBanner" class="banner" hidden></div>
+      <textarea id="url" dir="ltr" rows="4" placeholder="https://www.instagram.com/p/ABC123/
+https://www.instagram.com/reel/XYZ789/
+https://pin.it/abcd1234
+https://www.pinterest.com/user/board/"></textarea>
+      <div class="row" id="ytOpts" hidden style="margin-top:10px;padding:8px 12px;border:1px dashed var(--line);border-radius:10px">
+        <span class="hint" style="margin:0">یوتیوب:</span>
+        <select id="yt_quality" style="width:auto">
+          <option value="best">بهترین کیفیت</option>
+          <option value="1080">تا ۱۰۸۰p</option>
+          <option value="720">تا ۷۲۰p</option>
+          <option value="480">تا ۴۸۰p</option>
+          <option value="audio">فقط صدا (mp3)</option>
+        </select>
+        <label class="check" style="margin:0"><input type="checkbox" id="yt_playlist"> اگر ویدیو داخل پلی‌لیست است، کل پلی‌لیست</label>
+      </div>
+      <div class="row" style="justify-content:space-between;margin-top:10px">
+        <div class="hint grow" id="siteHint" style="margin:0"></div>
+        <button class="ghost" id="saveSrc" title="بورد یا کالکشن را در فهرست «منبع‌های من» نگه می‌دارد تا بعداً با یک کلیک به‌روز شود">ذخیره در فهرست</button>
+        <button id="go">دانلود</button>
+      </div>
+      <div class="hint" id="saveMsg"></div>
+    </div>
+
+    <div class="card" id="srcCard">
+      <div class="row" style="justify-content:space-between;margin-bottom:6px">
+        <h2 style="margin:0">منبع‌های من</h2>
+        <button class="small" id="updateAll">به‌روزرسانی همه</button>
+      </div>
+      <div id="srcList"></div>
+      <div class="hint" id="srcEmpty">هنوز چیزی ذخیره نکرده‌اید. لینک یک بورد یا کالکشن را بالا بگذارید و «ذخیره در فهرست» را بزنید؛ بعداً فقط پست‌های جدید دانلود می‌شود.</div>
+    </div>
+
+    <div class="card" id="jobCard" hidden>
+      <div class="row" style="justify-content:space-between">
+        <span class="state" id="state">در حال دانلود…</span>
+        <span class="row"><button class="ghost small" id="openFolder">باز کردن پوشه</button><button class="ghost small" id="cancel">توقف</button></span>
+      </div>
+      <div class="stats"><div><b id="count">0</b>فایل جدید</div><div><b id="skipped">0</b>تکراری</div></div>
+      <div id="progWrap" hidden style="margin:-4px 0 12px">
+        <progress id="prog" max="100" value="0" style="width:100%;height:10px"></progress>
+        <div class="hint" id="progText" style="direction:ltr;text-align:left;margin:2px 0 0"></div>
+      </div>
+      <pre id="log"></pre>
+    </div>
+
+    <details class="card" id="settings">
+      <summary>تنظیمات</summary>
+
+      <h2 style="margin-top:14px">ورود اینستاگرام</h2>
+      <div id="ckStatus" class="hint" style="font-size:14px"></div>
+      <div class="row" style="margin-top:8px">
+        <input type="file" id="ckFile" accept=".txt,text/plain" hidden>
+        <button class="ghost small" id="ckPick">آپلود فایل cookies.txt</button>
+        <button class="ghost small danger" id="ckDel" hidden>حذف ورود</button>
+      </div>
+      <div class="hint">با افزونه‌ی «Get cookies.txt LOCALLY» وقتی در instagram.com وارد هستید خروجی بگیرید و اینجا آپلود کنید. این فایل مثل رمز حساب شماست و فقط روی همین کامپیوتر می‌ماند.</div>
+
+      <h2 style="margin-top:18px">ورود یوتیوب <span class="hint" style="font-weight:400">(اختیاری)</span></h2>
+      <div id="ytStatus" class="hint" style="font-size:14px"></div>
+      <div class="row" style="margin-top:8px">
+        <input type="file" id="ytFile" accept=".txt,text/plain" hidden>
+        <button class="ghost small" id="ytPick">آپلود cookies.txt یوتیوب</button>
+        <button class="ghost small danger" id="ytDel" hidden>حذف ورود</button>
+      </div>
+      <div class="hint">معمولاً لازم نیست. فقط اگر یوتیوب پیام «ورود به حساب / ربات نیستید» داد یا ویدیو محدودیت سنی داشت، با همان افزونه از youtube.com (وقتی وارد هستید) خروجی بگیرید و اینجا آپلود کنید.</div>
+
+      <h2 style="margin-top:18px">دانلود</h2>
+      <label>پوشه‌ی ذخیره</label>
+      <input id="out_dir" dir="ltr">
+      <label class="check"><input type="checkbox" id="videos"> دانلود ویدیوها هم</label>
+      <label class="check"><input type="checkbox" id="save_captions"> ذخیره‌ی کپشن و لینک پست کنار هر فایل (فایل .txt؛ در گالری قابل جستجو)</label>
+      <label class="check"><input type="checkbox" id="collection_folders"> کالکشن‌های اینستاگرام در پوشه‌ی جدا با نام کالکشن (instagram\collections\نام)</label>
+      <label class="check"><input type="checkbox" id="profile_all"> برای لینک پروفایل اینستاگرام: پست‌ها + ریل‌ها + استوری + هایلایت‌ها</label>
+
+      <details style="margin-top:16px"><summary style="font-weight:400;color:var(--mute)">پیشرفته</summary>
+        <label>پروکسی (اگر بدون VPN سیستمی وصل نمی‌شود)</label>
+        <input id="proxy" dir="ltr" placeholder="http://127.0.0.1:10809   یا   socks5://127.0.0.1:10808">
+        <label>گرفتن ورود از مرورگر (جایگزین cookies.txt؛ برای Chrome/Edge جدید کار نمی‌کند)</label>
+        <select id="browser">
+          <option value="">بدون ورود</option>
+          <option value="firefox">کوکی‌های Firefox</option>
+          <option value="edge">کوکی‌های Edge</option>
+          <option value="chrome">کوکی‌های Chrome</option>
+        </select>
+        <label>مسیر یک فایل cookies.txt دیگر (اختیاری)</label>
+        <input id="cookies_file" dir="ltr" placeholder="C:\Users\...\instagram_cookies.txt">
+      </details>
+
+      <div class="row" style="margin-top:16px;justify-content:space-between">
+        <span class="row"><button class="ghost" id="save">ذخیره‌ی تنظیمات</button><span class="hint" id="saved"></span></span>
+        <button class="ghost danger" id="quit" title="سرور برنامه را می‌بندد">بستن برنامه</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- ───────── گالری ───────── -->
+  <section id="tab-gal" hidden>
+    <div class="card">
+      <div class="row">
+        <input id="q" class="grow" placeholder="جستجو در کپشن‌ها و نام فایل‌ها…">
+        <button class="ghost small" id="galReload">تازه‌سازی</button>
+      </div>
+      <div class="hint" id="galInfo"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div style="text-align:center;margin-top:14px"><button class="ghost" id="more" hidden>نمایش بیشتر</button></div>
+  </section>
+</main>
+
+<dialog id="lb">
+  <div class="lb">
+    <div class="media" id="lbMedia"></div>
+    <div class="side">
+      <div class="hint" id="lbMeta" style="direction:ltr;text-align:left;margin:0"></div>
+      <div class="capt" id="lbCap" dir="auto"></div>
+      <div class="row">
+        <button class="small" id="lbPrev">قبلی</button>
+        <button class="small" id="lbNext">بعدی</button>
+        <button class="ghost small" id="lbReveal">نمایش در پوشه</button>
+        <button class="ghost small" id="lbCopy">کپی کپشن</button>
+        <button class="ghost small" id="lbClose">بستن</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const H = {"Content-Type":"application/json","X-App":"cd"};
+const post = (u, b={}) => fetch(u, {method:"POST", headers:H, body:JSON.stringify(b)}).then(r => r.json());
+const get = u => fetch(u).then(r => r.json());
+const fa = ts => ts ? new Date(ts*1000).toLocaleString("fa-IR", {dateStyle:"medium", timeStyle:"short"}) : "";
+const rtl = s => /[؀-ۿ]/.test(s);
+
+/* ───── tabs ───── */
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  $("tab-dl").hidden = b.dataset.tab !== "dl";
+  $("tab-gal").hidden = b.dataset.tab !== "gal";
+  if (b.dataset.tab === "gal") galLoad(true);
+});
+
+/* ───── settings ───── */
+const textFields = ["out_dir","proxy","browser","cookies_file","yt_quality"];
+const boolFields = ["videos","save_captions","collection_folders","profile_all","yt_playlist"];
+async function loadSettings(){
+  const s = await get("/api/settings");
+  textFields.forEach(f => $(f).value = s[f] || "");
+  boolFields.forEach(f => $(f).checked = !!s[f]);
+}
+async function saveSettings(){
+  const body = Object.fromEntries(textFields.map(f => [f, $(f).value.trim()]));
+  boolFields.forEach(f => body[f] = $(f).checked);
+  await post("/api/settings", body);
+  $("saved").textContent = "ذخیره شد ✓"; setTimeout(()=>$("saved").textContent="",2000);
+}
+$("save").onclick = saveSettings;
+$("quit").onclick = async () => {
+  if (!confirm("برنامه بسته شود؟ برای اجرای دوباره باید Start را بزنید.")) return;
+  await post("/api/quit"); document.body.innerHTML = '<main><h1>برنامه بسته شد.</h1><p class="sub">این صفحه را می‌توانید ببندید.</p></main>';
+};
+
+/* ───── Instagram login (cookies.txt) ───── */
+let login = {exists:false};
+async function loadLogin(){
+  login = await get("/api/cookies");
+  const el = $("ckStatus");
+  if (!login.exists || !login.logged_in) { el.className = "hint warn"; el.textContent = "ورود اینستاگرام تنظیم نشده — برای دانلود از اینستاگرام لازم است."; }
+  else if (login.expired) { el.className = "hint err"; el.textContent = "ورود اینستاگرام منقضی شده؛ دوباره cookies.txt بگیرید و آپلود کنید."; }
+  else {
+    const left = login.expires ? Math.floor((login.expires*1000 - Date.now())/86400000) : null;
+    el.className = "hint ok";
+    el.textContent = "ورود اینستاگرام فعال است ✓" + (left !== null ? ` (حدود ${left} روز اعتبار دارد)` : "");
+  }
+  $("ckDel").hidden = !login.exists;
+  showBanner();
+}
+$("ckPick").onclick = () => $("ckFile").click();
+$("ckFile").onchange = async () => {
+  const f = $("ckFile").files[0]; if (!f) return;
+  const r = await post("/api/cookies", {text: await f.text()});
+  $("ckFile").value = "";
+  if (r.error) alert(r.error); else await loadLogin();
+};
+$("ckDel").onclick = async () => { if (confirm("ورود ذخیره‌شده‌ی اینستاگرام حذف شود؟")) { await post("/api/cookies/delete"); loadLogin(); } };
+function showBanner(){
+  const needs = links().some(u => u.includes("instagram.com"));
+  const b = $("loginBanner");
+  const bad = !login.exists || !login.logged_in || login.expired;
+  b.hidden = !(needs && bad);
+  if (!b.hidden) b.textContent = login.expired ? "ورود اینستاگرام منقضی شده. در «تنظیمات» فایل cookies.txt جدید آپلود کنید."
+                                              : "برای اینستاگرام باید در «تنظیمات» فایل cookies.txt آپلود کنید.";
+}
+
+/* ───── YouTube login (optional) ───── */
+async function loadYt(){
+  const y = await get("/api/cookies-yt"); const el = $("ytStatus");
+  if (!y.exists || !y.logged_in) { el.className = "hint"; el.textContent = "ورود یوتیوب تنظیم نشده (برای اکثر ویدیوها لازم نیست)."; }
+  else if (y.expired) { el.className = "hint err"; el.textContent = "ورود یوتیوب منقضی شده؛ دوباره cookies.txt بگیرید."; }
+  else { el.className = "hint ok"; el.textContent = "ورود یوتیوب فعال است ✓"; }
+  $("ytDel").hidden = !y.exists;
+}
+$("ytPick").onclick = () => $("ytFile").click();
+$("ytFile").onchange = async () => {
+  const f = $("ytFile").files[0]; if (!f) return;
+  const r = await post("/api/cookies-yt", {text: await f.text()}); $("ytFile").value = "";
+  if (r.error) alert(r.error); else loadYt();
+};
+$("ytDel").onclick = async () => { if (confirm("ورود ذخیره‌شده‌ی یوتیوب حذف شود؟")) { await post("/api/cookies-yt/delete"); loadYt(); } };
+
+/* ───── link box ───── */
+function links(){ return [...new Set($("url").value.match(/https?:\/\/\S+/g) || [])]; }
+const isYt = u => /https?:\/\/([a-z0-9-]+\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com)\//i.test(u);
+function isSingle(u){
+  u = u.toLowerCase();
+  if (isYt(u)) {                       // playlists and channels are collections; a lone video is not
+    return !(/\/playlist\?/.test(u) || /youtube\.com\/(@|channel\/|c\/|user\/)/.test(u));
+  }
+  return /instagram\.com\/(p|reel|reels|tv)\//.test(u) || u.includes("pin.it/") || /pinterest\.[a-z.]+\/pin\//.test(u);
+}
+function kind(u){
+  u = u.toLowerCase();
+  if (isYt(u)) {
+    if (/\/playlist\?/.test(u)) return "پلی‌لیست یوتیوب";
+    if (/youtube\.com\/(@|channel\/|c\/|user\/)/.test(u)) return "کانال یوتیوب";
+    if (u.includes("/shorts/")) return "شورت یوتیوب";
+    return "ویدیو یوتیوب";
+  }
+  if (u.includes("instagram.com")) {
+    if (/\/(p|reel|reels|tv)\//.test(u)) return "پست اینستاگرام";
+    if (u.includes("/saved")) return "کالکشن اینستاگرام";
+    if (u.includes("/stories/highlights/")) return "هایلایت اینستاگرام";
+    if (u.includes("/stories/")) return "استوری اینستاگرام";
+    if (/\/highlights\/?$/.test(u)) return "هایلایت‌های اینستاگرام";
+    return "پروفایل اینستاگرام";
+  }
+  if (u.includes("pin.it/") || u.includes("/pin/")) return "پین تکی";
+  if (u.includes("pinterest")) return "بورد پینترست";
+  return "لینک دیگر";
+}
+$("url").oninput = () => {
+  const l = links(); $("saveMsg").textContent = "";
+  $("ytOpts").hidden = !l.some(isYt);
+  if (!l.length) { $("siteHint").textContent = ""; showBanner(); return; }
+  const counts = {}; l.forEach(u => counts[kind(u)] = (counts[kind(u)] || 0) + 1);
+  $("siteHint").textContent = Object.entries(counts).map(([k, n]) => n > 1 ? `${n} ${k}` : k).join(" + ");
+  showBanner();
+};
+
+/* ───── sources ───── */
+let sources = [];
+function renderSources(){
+  const box = $("srcList"); box.textContent = "";
+  $("srcEmpty").hidden = sources.length > 0;
+  $("updateAll").hidden = sources.length === 0;
+  for (const s of sources) {
+    const row = document.createElement("div"); row.className = "src";
+    const info = document.createElement("div"); info.className = "grow";
+    const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = s.name;
+    const u = document.createElement("div"); u.className = "u"; u.textContent = s.url;
+    const meta = document.createElement("div"); meta.className = "meta";
+    meta.textContent = s.last_run ? `آخرین به‌روزرسانی: ${fa(s.last_run)} — ${s.last_new} فایل جدید` + (s.last_ok ? "" : " (با خطا)") : "هنوز دانلود نشده";
+    if (s.last_run && !s.last_ok) meta.classList.add("err");
+    info.append(nm, u, meta);
+    const up = document.createElement("button"); up.className = "small"; up.textContent = "به‌روزرسانی";
+    up.onclick = () => startJob([s.url]);
+    const rn = document.createElement("button"); rn.className = "ghost small"; rn.textContent = "نام";
+    rn.onclick = async () => { const n = prompt("نام جدید:", s.name); if (n) { sources = await post("/api/sources/rename", {id:s.id, name:n}); renderSources(); } };
+    const del = document.createElement("button"); del.className = "ghost small danger"; del.textContent = "حذف";
+    del.onclick = async () => { if (confirm(`«${s.name}» از فهرست حذف شود؟ (فایل‌های دانلودشده پاک نمی‌شوند)`)) { sources = await post("/api/sources/delete", {id:s.id}); renderSources(); } };
+    row.append(info, up, rn, del); box.append(row);
+  }
+}
+async function loadSources(){ sources = await get("/api/sources"); renderSources(); }
+$("saveSrc").onclick = async () => {
+  const l = links(); const keep = l.filter(u => !isSingle(u));
+  if (!l.length) { $("saveMsg").textContent = "اول لینک را بگذارید."; return; }
+  if (!keep.length) { $("saveMsg").textContent = "پست و پین تکی در فهرست ذخیره نمی‌شود؛ فقط بورد، کالکشن و پروفایل."; return; }
+  const r = await post("/api/sources", {url: keep.join("\n")});
+  sources = r.sources; renderSources();
+  $("saveMsg").textContent = r.added ? `${r.added} مورد به فهرست اضافه شد ✓` : "این لینک‌ها از قبل در فهرست هستند.";
+};
+$("updateAll").onclick = () => { if (sources.length) startJob(sources.map(s => s.url)); };
+
+/* ───── download job ───── */
+let jobId = null, from = 0, timer = null;
+async function startJob(urls){
+  await saveSettings();
+  const r = await post("/api/start", {url: urls.join("\n")});
+  if (r.error) { alert(r.error); return; }
+  jobId = r.id; from = 0; $("log").textContent = ""; $("jobCard").hidden = false;
+  $("go").disabled = true; $("updateAll").disabled = true; $("cancel").disabled = false;
+  $("jobCard").scrollIntoView({behavior:"smooth", block:"nearest"});
+  clearInterval(timer); timer = setInterval(poll, 800); poll();
+}
+$("go").onclick = () => { const l = links(); if (!l.length) { alert("لینک معتبری پیدا نشد"); return; } startJob(l); };
+$("cancel").onclick = () => jobId && post(`/api/job/${jobId}/cancel`);
+$("openFolder").onclick = () => post("/api/open-folder");
+
+async function poll(){
+  const j = await get(`/api/job/${jobId}?from=${from}`);
+  if (j.log.length) {
+    const pre = $("log");
+    for (const line of j.log) {
+      const d = document.createElement("div");
+      d.textContent = line;
+      if (rtl(line)) { d.dir = "rtl"; d.style.textAlign = "right"; }
+      if (line.startsWith("[راهنما]")) d.style.color = "var(--acc)";
+      pre.appendChild(d);
+    }
+    pre.scrollTop = pre.scrollHeight;
+  }
+  from = j.log_len; $("count").textContent = j.count; $("skipped").textContent = j.skipped;
+  const pg = j.state === "running" ? j.progress : null;
+  $("progWrap").hidden = !pg;
+  if (pg) { $("prog").value = pg.pct; $("progText").textContent = `${pg.pct.toFixed(1)}%  ${pg.size ? "of " + pg.size : ""}  ${pg.speed ? "· " + pg.speed : ""}  ${pg.eta ? "· ETA " + pg.eta : ""}`; }
+  const st = $("state"); st.className = "state " + j.state;
+  const multi = j.total > 1;
+  st.textContent = {
+    running: multi ? `در حال دانلود… (لینک ${j.current} از ${j.total})` : "در حال دانلود…",
+    done: "تمام شد ✓", cancelled: "متوقف شد",
+    error: multi ? `تمام شد، ولی ${j.failed} لینک از ${j.total} خطا داشت — پیام‌های پایین را ببینید`
+                 : "خطا — پیام‌های پایین را ببینید (شاید ورود به حساب یا پروکسی لازم است)"}[j.state];
+  if (j.state !== "running") {
+    clearInterval(timer); $("go").disabled = false; $("updateAll").disabled = false; $("cancel").disabled = true;
+    loadSources(); loadLogin();
+  }
+}
+
+/* ───── gallery ───── */
+const PAGE = 60;
+let gItems = [], gTotal = 0, gQ = "", gIdx = -1, io = null;
+const fileUrl = p => "/api/file?p=" + encodeURIComponent(p);
+const thumbUrl = p => "/api/thumb?p=" + encodeURIComponent(p);
+async function galLoad(reset){
+  if (reset) { gItems = []; $("grid").textContent = ""; gQ = $("q").value.trim(); }
+  const r = await get(`/api/gallery?offset=${gItems.length}&limit=${PAGE}&q=${encodeURIComponent(gQ)}`);
+  gTotal = r.total;
+  const start = gItems.length; gItems = gItems.concat(r.items);
+  r.items.forEach((it, i) => $("grid").append(tile(it, start + i)));
+  $("galInfo").textContent = gTotal ? `${gTotal} فایل` + (gQ ? ` برای «${gQ}»` : "") : (gQ ? "چیزی پیدا نشد." : "هنوز فایلی دانلود نشده.");
+  $("more").hidden = gItems.length >= gTotal;
+}
+function tile(it, idx){
+  const b = document.createElement("button"); b.className = "tile"; b.onclick = () => openLb(idx);
+  if (it.kind === "image") {
+    const im = document.createElement("img"); im.loading = "lazy"; im.src = thumbUrl(it.p); b.append(im);
+  } else if (it.kind === "audio") {
+    b.style.cssText += "display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;padding:10px;color:var(--ink)";
+    const n = document.createElement("div"); n.textContent = "♪"; n.style.fontSize = "34px";
+    const t = document.createElement("div"); t.textContent = it.p.split("/").pop().replace(/\.[^.]+$/, ""); t.dir = "auto";
+    t.style.cssText = "font-size:11.5px;line-height:1.4;max-height:4.2em;overflow:hidden;text-align:center";
+    b.append(n, t);
+    const bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "صدا"; b.append(bd);
+  } else {
+    const v = document.createElement("video"); v.muted = true; v.preload = "none"; v.dataset.src = fileUrl(it.p) + "#t=0.1"; b.append(v);
+    (io = io || new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { const v = e.target; v.src = v.dataset.src; v.preload = "metadata"; io.unobserve(v); } }), {rootMargin:"200px"})).observe(v);
+    const bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "ویدیو"; b.append(bd);
+  }
+  if (it.caption) { const c = document.createElement("div"); c.className = "cap"; c.textContent = it.caption.replace(/\s+/g, " ").slice(0, 110); c.dir = "auto"; b.append(c); }
+  return b;
+}
+$("more").onclick = () => galLoad(false);
+$("galReload").onclick = () => galLoad(true);
+let qt = null; $("q").oninput = () => { clearTimeout(qt); qt = setTimeout(() => galLoad(true), 350); };
+
+function openLb(i){
+  if (i < 0 || i >= gItems.length) return;
+  gIdx = i; const it = gItems[i]; const m = $("lbMedia"); m.textContent = "";
+  if (it.kind === "image") { const im = document.createElement("img"); im.src = fileUrl(it.p); m.append(im); }
+  else if (it.kind === "audio") { const a = document.createElement("audio"); a.src = fileUrl(it.p); a.controls = true; a.autoplay = true; a.style.width = "90%"; m.append(a); }
+  else { const v = document.createElement("video"); v.src = fileUrl(it.p); v.controls = true; v.autoplay = true; m.append(v); }
+  $("lbMeta").textContent = `${it.p}  ·  ${(it.size/1048576).toFixed(1)} MB`;
+  $("lbCap").textContent = it.caption || "(کپشنی ذخیره نشده)";
+  $("lbPrev").disabled = i === 0; $("lbNext").disabled = i >= gItems.length - 1;
+  if (!$("lb").open) $("lb").showModal();
+  if (i >= gItems.length - 3 && gItems.length < gTotal) galLoad(false);
+}
+function closeLb(){ $("lbMedia").textContent = ""; $("lb").close(); }
+$("lbClose").onclick = closeLb;
+$("lb").addEventListener("close", () => { $("lbMedia").textContent = ""; });
+$("lbPrev").onclick = () => openLb(gIdx - 1);
+$("lbNext").onclick = () => openLb(gIdx + 1);
+$("lbReveal").onclick = () => post("/api/reveal", {p: gItems[gIdx].p});
+$("lbCopy").onclick = async () => { try { await navigator.clipboard.writeText(gItems[gIdx].caption || ""); $("lbCopy").textContent = "کپی شد ✓"; setTimeout(() => $("lbCopy").textContent = "کپی کپشن", 1500); } catch {} };
+$("lb").addEventListener("keydown", e => { if (e.key === "ArrowLeft") openLb(gIdx + 1); if (e.key === "ArrowRight") openLb(gIdx - 1); });
+$("lb").addEventListener("click", e => { if (e.target === $("lb")) closeLb(); });
+
+loadSettings().then(() => $("url").oninput()); loadSources(); loadLogin(); loadYt();
+</script>
+</body>
+</html>
