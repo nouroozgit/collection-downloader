@@ -51,7 +51,7 @@ Produces `dist\CollectionDownloader\CollectionDownloader.exe` (PyInstaller). Kee
 
 ## License
 
-No license has been chosen yet; all rights reserved by the author.
+Released under the [MIT License](LICENSE). The bundled third-party tools keep their own licenses (see the release notes).
 
 ---
 
@@ -110,6 +110,6 @@ build_exe.bat
 
 ## مجوز
 
-هنوز مجوزی انتخاب نشده است؛ همه‌ی حقوق برای نویسنده محفوظ است.
+تحت [مجوز MIT](LICENSE) منتشر شده است. ابزارهای همراه شخص ثالث مجوز خودشان را دارند (جزئیات در یادداشت‌های ریلیز).
 
 </div>
